@@ -1,0 +1,10 @@
+This is the first assignment for AE625.
+
+
+Usage:
+python simulator.py FILENAME 
+#FILENAME is the name of file you want to simulate without extension
+
+
+
+
