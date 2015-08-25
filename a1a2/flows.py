@@ -19,7 +19,9 @@ class TestElement:
     
     def get_pos(self):
         return self._position
-
+    
+    def get_color(self):
+        return 'y'
 
 class FlowElement:
     def __init__(self,position,strength,vel=complex(0,0),fixed =False):
@@ -48,12 +50,17 @@ class tracer(FlowElement):
     def compute_vel(self,outputPosition):
         return complex(0,0)
 
+    def get_color(self):
+        return 'r'
+
 class Source(FlowElement):    
     def compute_potential(self,outputPosition):
         return self._strength*cmath.log(outputPosition -self._position)
     
     def compute_vel(self,outputPosition):
         return (self._strength/(outputPosition-self._position)).conjugate()
+    def get_color(self):
+        return 'k'
 
 class Sink(FlowElement):    
     def compute_potential(self,outputPosition):
@@ -61,6 +68,10 @@ class Sink(FlowElement):
     
     def compute_vel(self,outputPosition):
         return (-self._strength/(outputPosition-self._position)).conjugate()
+    def get_color(self):
+        return 'm'
+
+
 
 class Doublet(FlowElement):    
     def compute_potential(self,outputPosition):
@@ -68,6 +79,10 @@ class Doublet(FlowElement):
     
     def compute_vel(self,outputPosition):
         return (-self._strength/pow((outputPosition-self._position),2)).conjugate()
+
+    def get_color(self):
+        return 'g'
+
 
 class Vortex(FlowElement):    
     def compute_potential(self,outputPosition):
@@ -79,6 +94,21 @@ class Vortex(FlowElement):
                 outputPosition-self._position)).conjugate()
         except ZeroDivisionError:
             return complex(0,0)
+
+    def get_color(self):
+        return 'b'
+
+
+class VortexBlobKrasny(Vortex):
+    def __init__(self,position,strength,vel=complex(0,0),fixed =False,
+            delta = 0.1):
+        self.delta = delta;
+        super(Vortex,self).__init__(position,strength,vel,fixed)
+    def compute_vel(self,outputPosition):
+        radius = abs(outputPosition-self._position)
+        kernelConst = pow(radius,2)/(pow(self.delta,2)+pow(radius,2))
+        return kernelConst*super(
+                VortexBlobKrasny,self).compute_vel(outputPosition)
 
 class Uniform(FlowElement):
     def compute_vel(self,outputPosition):

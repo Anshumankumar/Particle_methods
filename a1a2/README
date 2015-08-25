@@ -1,0 +1,16 @@
+#This is the second assignment for AE625.
+
+
+#Usage:
+python main.py FILENAME 
+#FILENAME is the name of file you want to simulate without extension
+
+
+#For Seeing the animation 
+#Change the plotter.run function in main.py to 
+plotter.run(filename,False,True,False) 
+
+
+
+
+

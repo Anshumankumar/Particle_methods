@@ -7,6 +7,7 @@ class ParticlePlotter:
     def __init__(self,a,b):
         self.ax = plt.axes(xlim=a,ylim=b)
         self.particles =  self.ax.scatter([],[])
+        self.lines, =  self.ax.plot([],[])
         self.counter = 0
     
     def update(self,data,colors):
@@ -30,7 +31,8 @@ class ParticlePlotter:
     def init(self):
         if (self.counter >= len(self.data)):
             self.particles =  self.ax.scatter([],[])
-            return self.particles
+            self.line1, =  self.ax.plot([],[])
+            return self.particles,self.line
         dataArray = self.data[self.counter]
         self.counter = self.counter+1
         elemPointsX = []
@@ -38,9 +40,10 @@ class ParticlePlotter:
             elemPointsX.append([elements.real,elements.imag])
 
         particlesX = np.array(elemPointsX)
-        self.particles.set_animated(True)
-        self.particles =  self.ax.scatter(particlesX[:,0],particlesX[:,1],c = self.colors)
-        return self.particles
+        #self.particles.set_animated(True)
+       # self.particles =  self.ax.scatter(particlesX[:,0],particlesX[:,1],c = self.colors)
+        self.line1, =  self.ax.plot(particlesX[:,0],particlesX[:,1])
+        return self.line1
 
     def animationupdate(self,count):
         if (self.counter >= len(self.data)):
@@ -51,20 +54,26 @@ class ParticlePlotter:
         for elements in dataArray:
             elemPointsX.append([elements.real,elements.imag])
         particlesX = np.array(elemPointsX)
-        self.particles.set_offsets(particlesX)
-        return self.particles
+        #self.particles.set_offsets(particlesX)
+        self.line1.set_data(particlesX[:,0],particlesX[:,1])
+        return self.line1
 
-    def run(self,filename):
-        self.plottrace()
-        """ 
-        ani = animation.FuncAnimation(self.fig, self.animationupdate,
-                save_count=150,blit=False, interval=1,init_func=self.init)
+    def run(self,filename,plotTraceFlag =True, animationFlag=True,
+            saveVideo=True ):
+        if plotTraceFlag == True:
+            self.plottrace()
+        
+        if animationFlag == True:
+            ani = animation.FuncAnimation(self.fig, self.animationupdate,
+                save_count=200,blit=False, interval=1,
+                init_func=self.init)
        
         # Set up formatting for the movie files
-        Writer = animation.writers['ffmpeg']
-        writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
-        #ani.save(filename +'.mp4', writer=writer)
-        """
-        
+            Writer = animation.writers['ffmpeg']
+            writer = Writer(fps=15, metadata=dict(artist='Me'),
+                    bitrate=1800)
+            if saveVideo == True:
+                ani.save(filename +'.mp4', writer=writer)
+            
         plt.show()
-
+    
