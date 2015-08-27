@@ -1,3 +1,6 @@
+import sys
+sys.path.insert(0, '../common')
+
 from flows import Vortex
 import math
 def getStrength(y,distance):

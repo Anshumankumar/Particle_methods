@@ -1,7 +1,9 @@
+import sys
+sys.path.insert(0, '../common')
+
 from simulator  import Simulator
 import plotter as p
 import simulator
-import sys
 import importlib
 
 #Import the file to be simulated
@@ -35,4 +37,4 @@ if __name__ == '__main__':
     data,colors = sim.run(simulator.SIM_TIME)
     plotter = p.ParticlePlotter((-2,2),(-2,2))
     plotter.update(data,colors)
-    plotter.run(filename,False,True,True)
+    plotter.run(filename,False,True,False)

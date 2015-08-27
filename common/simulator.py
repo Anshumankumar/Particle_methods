@@ -35,7 +35,7 @@ class Simulator:
             if MODE == 'EULER':
                 self.update_euler()
             else:
-                self.update()
+                self.update_rk()
             if (self.counter%UPDATE_FRAMES == 0):
                 for element in self.elementArray:
                     tempPointArray.append(element.get_pos())
@@ -50,22 +50,20 @@ class Simulator:
         for element in elementArray:
             tempVel = complex(0,0)
             for element2 in elementArray:
-                if (element != element2):
-                     tempVel = tempVel + element2.compute_vel(
-                             element.get_pos())
+                tempVel = tempVel + element2.compute_vel(element.get_pos())
             tempVelArray.append(tempVel)
         return tempVelArray
 
-    def update(self):
+    def update_rk(self):
         elementArray2 =  deepcopy(self.elementArray)
         tempVelArray =  self.vel_update(elementArray2)
         for i in range(len(elementArray2)):
-            elementArray2[i].update_flow_euler(tempVelArray[i],TIME_STEP/2) 
+            elementArray2[i].change_pos(tempVelArray[i],TIME_STEP/2) 
         tempVelArray =  self.vel_update(elementArray2)
         for i in range(len(self.elementArray)):
-            self.elementArray[i].update_flow_euler(tempVelArray[i],TIME_STEP) 
+            self.elementArray[i].change_pos(tempVelArray[i],TIME_STEP) 
                
     def update_euler(self):
         tempVelArray =  self.vel_update(self.elementArray)
         for i in range(len(self.elementArray)):
-            self.elementArray[i].update_flow_euler(tempVelArray[i],TIME_STEP) 
+            self.elementArray[i].change_pos(tempVelArray[i],TIME_STEP) 
