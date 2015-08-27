@@ -5,6 +5,8 @@ import flows as f
 import cmath
 import math
 
+def sign(a):
+    return 2*(a>0)-1
 
 def matCreator(pointlist):
     size = 0;
@@ -38,14 +40,18 @@ def computeStregth(pointlist,object1, object2, matA,i,j):
             tranZ = (midPoint - object1)*cmath.exp(complex(0,-1)*phase)
             velConst =  getStrength1(tranZ,length,phase)
             angle = cmath.phase(objects[nextPoint]-objects[k])+cmath.pi/2
-            velConst = abs(complex(velConst.real*(math.cos(angle)),
-                            velConst.imag*(math.sin(angle))))
+            velConst = complex(velConst.real*(math.cos(angle)),
+                            velConst.imag*(math.sin(angle)))
+            velConst = sign(cmath.exp(1j*angle).real*velConst.real)* \
+                abs(velConst)
             matA[currentPointer+k][i] = matA[currentPointer+k][i] + \
                     velConst
             velConst =  getStrength2(tranZ,length,phase)
             angle = cmath.phase(objects[nextPoint]-objects[k])+cmath.pi/2
-            velConst = abs(complex(velConst.real*(math.cos(angle)),
+            velConst = (complex(velConst.real*(math.cos(angle)),
                             velConst.imag*(math.sin(angle))))
+            velConst = sign(cmath.exp(1j*angle).real*velConst.real)* \
+                abs(velConst)
             matA[currentPointer+k][j] = matA[currentPointer+k][j]+  \
                 velConst
         currentPointer = currentPointer +len(objects)
@@ -73,6 +79,8 @@ def createMatb(pointlist,pFlowArray):
             for element in pFlowArray:
                 matB[k] = matB[k] + element.compute_vel(midPoint)
             angle = cmath.phase(objects[nextPoint]-objects[k])+cmath.pi/2
-            matB[k] = abs(complex(matB[k].real*(math.cos(angle)),
+            matB[k] = (complex(matB[k].real*(math.cos(angle)),
                             matB[k].imag*(math.sin(angle))))
+            matB[k] = sign(cmath.exp(1j*angle).real*matB[k].real)* \
+                    abs(matB[k])
     return matB

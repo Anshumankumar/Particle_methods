@@ -1,9 +1,9 @@
 from flows import *
 from copy import deepcopy
 
-TIME_STEP = 0.01
-UPDATE_FRAMES = 10
-SIM_TIME = 5
+TIME_STEP = 0.1
+UPDATE_FRAMES = 1
+SIM_TIME = 1
 MODE = 'RK'
 
 class Simulator:

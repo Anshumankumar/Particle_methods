@@ -7,7 +7,7 @@ class ParticlePlotter:
     def __init__(self,a,b):
         self.ax = plt.axes(xlim=a,ylim=b)
         self.particles =  self.ax.scatter([],[])
-        self.lines, =  self.ax.plot([],[])
+        #self.lines, =  self.ax.plot([],[])
         self.counter = 0
     
     def update(self,data,colors):
@@ -31,8 +31,9 @@ class ParticlePlotter:
     def init(self):
         if (self.counter >= len(self.data)):
             self.particles =  self.ax.scatter([],[])
-            self.line1, =  self.ax.plot([],[])
-            return self.particles,self.line
+         #   self.line1, =  self.ax.plot([],[])
+            return self.particles
+        #,self.line
         dataArray = self.data[self.counter]
         self.counter = self.counter+1
         elemPointsX = []
@@ -40,10 +41,10 @@ class ParticlePlotter:
             elemPointsX.append([elements.real,elements.imag])
 
         particlesX = np.array(elemPointsX)
-        #self.particles.set_animated(True)
-       # self.particles =  self.ax.scatter(particlesX[:,0],particlesX[:,1],c = self.colors)
-        self.line1, =  self.ax.plot(particlesX[:,0],particlesX[:,1])
-        return self.line1
+        self.particles.set_animated(True)
+        self.particles =  self.ax.scatter(particlesX[:,0],particlesX[:,1],c = self.colors)
+       # self.line1, =  self.ax.plot(particlesX[:,0],particlesX[:,1])
+        return self.particles
 
     def animationupdate(self,count):
         if (self.counter >= len(self.data)):
@@ -54,9 +55,9 @@ class ParticlePlotter:
         for elements in dataArray:
             elemPointsX.append([elements.real,elements.imag])
         particlesX = np.array(elemPointsX)
-        #self.particles.set_offsets(particlesX)
-        self.line1.set_data(particlesX[:,0],particlesX[:,1])
-        return self.line1
+        self.particles.set_offsets(particlesX)
+        #self.line1.set_data(particlesX[:,0],particlesX[:,1])
+        return self.particles
 
     def run(self,filename,plotTraceFlag =True, animationFlag=True,
             saveVideo=True ):

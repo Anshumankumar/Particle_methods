@@ -41,6 +41,8 @@ class FlowElement:
     def print_pos(self):
         print(self._position)
 
+    def get_color(self):
+        return 'y'
     def decoVel(func):
         def vel(*arg,**kwargs):
             try:
@@ -127,24 +129,35 @@ class VortexPanel(FlowElement):
         super(VortexPanel,self).__init__(midPoint,strength,vel,fixed)
     
     def compute_vel(self,position):
+        print(position)
         tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
-        return self._strength[0]*getStrengthC1(tranZ)+ \
-               self._strength[1]*getStrengthC2(tranZ)
+        return self._strength[0]*self.getStrengthC1(tranZ)+ \
+               self._strength[1]*self.getStrengthC2(tranZ)
 
-    def getStrengthC1(tranZ):
-        return (0-0.5j/math.pi)*((tranZ/self.length -1)*cmath.log((
-            tranZ-self.length)/tranZ) +1)*-cmath.exp(-1j*self.phase)) \
-            .conjugate()
+    def getStrengthC1(self,tranZ):
+        try:
+            return ((-0.5j/cmath.pi)*((tranZ/self.length -1)*cmath.log((
+                tranZ-self.length)/tranZ) +1) \
+                *-cmath.exp(complex(0,-1)*self.phase)) \
+            .   conjugate()
+        except TypeError:
+            print("YO" ,self.phase,self.length,tranZ)
+            return (0,0)
+            
      
-    def getStrengthC2(tranZ):
-        return (0.5j/math.pi)*((tranZ/self.length)*cmath.log((
-            tranZ-self.length)/tranZ) +1)*-cmath.exp(-1j*self.phase)) \
-            .conjugate()
-
+    def getStrengthC2(self,tranZ):
+        try:
+            return ((0.5j/cmath.pi)*((tranZ/self.length)*cmath.log((
+                tranZ-self.length)/tranZ) +1) \
+                *-cmath.exp(-1j*self.phase)) \
+                .conjugate()
+        except TypeError:
+       #     print("YO" ,self.phase,self.length,tranZ)
+            return (0,0)
+     
 class Uniform(FlowElement):
     def compute_vel(self,outputPosition):
          return (complex(self._strength,0))
-
 
 def update(test):
     for elements in test:
