@@ -19,34 +19,32 @@ def createVortexSheet(matC,pointlist,pFlowArray):
             pFlowArray.append(f.VortexPanel(pos,strength,fixed = True))
 
 def addTracerPoint(pFlowArray):
-    pos = complex(-2,0)
-  #  pFlowArray.append(f.Vortex(pos,1,1,False))
+    for i in range(-20,20,4):
+        pos = complex(-2,i/10.0)
+        pFlowArray.append(f.tracer(pos,1,1,False))
 
 if __name__ == '__main__':
     print('Assignment 3')
     pFlowArray = []
-    pFlowArray.append(f.Uniform(complex(-1,-1.5),1,1,False))
+    pFlowArray.append(f.Uniform(complex(-100,0),1,1,False))
     pointlist = [[complex(1,1),complex(1,-1),complex(-1,-1),complex(-1,1)]]
-   # pointlist = cylinder()
+    pointlist = cylinder()
     matA = matCreator(pointlist)
     Inverse = linalg.pinv(matA)
-    matB = createMatb(pointlist,pFlowArray)
     Inverse = np.matrix(Inverse)
+    matB = createMatb(pointlist,pFlowArray)
     matB = np.matrix(matB).transpose()
-    print("MATRICA")
     matC = Inverse*matB
     matC = np.array(matC.transpose())[0].tolist()
-    print(matC)
-    print(matC[0])
-    print(pointlist[0][0])
     createVortexSheet(matC,pointlist,pFlowArray)
     addTracerPoint(pFlowArray)
     
     sim = Simulator()
     sim.parse_from_file(pFlowArray)
-    data,colors = sim.run(1)
+    
+    data,colors = sim.run(5)
     plotter = p.ParticlePlotter((-2,2),(-2,2))
     plotter.update(data,colors)
     filename = "temp"
-    plotter.run(filename,False,True,False)
+    plotter.run(filename,True,False,False)
 

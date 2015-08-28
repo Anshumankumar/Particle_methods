@@ -1,9 +1,9 @@
 from flows import *
 from copy import deepcopy
 
-TIME_STEP = 0.1
-UPDATE_FRAMES = 1
-SIM_TIME = 1
+TIME_STEP = 0.01
+UPDATE_FRAMES = 4
+SIM_TIME = 5
 MODE = 'RK'
 
 class Simulator:
@@ -29,17 +29,23 @@ class Simulator:
         print('Flow Simulator for Potential Flows')
         time = 0.0
         while (time < timelimit):
-            tempPointArray = []
-            self.counter = self.counter+1;
+            self.runSingle()
             time = time + TIME_STEP
-            if MODE == 'EULER':
-                self.update_euler()
-            else:
-                self.update_rk()
-            if (self.counter%UPDATE_FRAMES == 0):
-                for element in self.elementArray:
-                    tempPointArray.append(element.get_pos())
-                self.pointArray.append(tempPointArray)
+        return self.getFinal()
+    
+    def runSingle(self):
+        tempPointArray = []
+        self.counter = self.counter+1;
+        if MODE == 'EULER':
+            self.update_euler()
+        else:
+            self.update_rk()
+        if (self.counter%UPDATE_FRAMES == 0):
+            for element in self.elementArray:
+                tempPointArray.append(element.get_pos())
+            self.pointArray.append(tempPointArray)
+    
+    def getFinal(self):
         colors = []
         for element in self.elementArray:
             colors.append(element.get_color())
@@ -49,6 +55,9 @@ class Simulator:
         tempVelArray =  []
         for element in elementArray:
             tempVel = complex(0,0)
+            if element.fixed == True:
+                tempVelArray.append(tempVel)
+                continue
             for element2 in elementArray:
                 tempVel = tempVel + element2.compute_vel(element.get_pos())
             tempVelArray.append(tempVel)

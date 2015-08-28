@@ -129,31 +129,22 @@ class VortexPanel(FlowElement):
         super(VortexPanel,self).__init__(midPoint,strength,vel,fixed)
     
     def compute_vel(self,position):
-        print(position)
-        tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
-        return self._strength[0]*self.getStrengthC1(tranZ)+ \
-               self._strength[1]*self.getStrengthC2(tranZ)
+        return self._strength[0]*self.getStrengthC1(position)+ \
+               self._strength[1]*self.getStrengthC2(position)
 
-    def getStrengthC1(self,tranZ):
-        try:
-            return ((-0.5j/cmath.pi)*((tranZ/self.length -1)*cmath.log((
+    def getStrengthC1(self,position):
+        tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
+        return ((-0.5j/cmath.pi)*((tranZ/self.length -1)*cmath.log((
                 tranZ-self.length)/tranZ) +1) \
                 *-cmath.exp(complex(0,-1)*self.phase)) \
             .   conjugate()
-        except TypeError:
-            print("YO" ,self.phase,self.length,tranZ)
-            return (0,0)
-            
-     
-    def getStrengthC2(self,tranZ):
-        try:
-            return ((0.5j/cmath.pi)*((tranZ/self.length)*cmath.log((
+
+    def getStrengthC2(self,position):
+        tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
+        return ((0.5j/cmath.pi)*((tranZ/self.length)*cmath.log((
                 tranZ-self.length)/tranZ) +1) \
                 *-cmath.exp(-1j*self.phase)) \
                 .conjugate()
-        except TypeError:
-       #     print("YO" ,self.phase,self.length,tranZ)
-            return (0,0)
      
 class Uniform(FlowElement):
     def compute_vel(self,outputPosition):
