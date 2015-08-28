@@ -1,6 +1,8 @@
 *.mp4
 *.pdf
 *.png
+*.aux
+*.log
 *.*.swo
 *.*.swp
 __pycache__

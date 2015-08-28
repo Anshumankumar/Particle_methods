@@ -1,0 +1,34 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\graphicspath{ {images/} }
+\title {Particle Method Assignment 3 \\
+Vortex Panel Method } 
+\author {Anshuman kumar \\
+Roll no.  120010036}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+It was really difficult to implement the Vortex Panel method with each panel method having linear distribution
+of vorticity. The difficulty came due to complicated formula of linear Panels which posed a difficulty in creating
+the Matrix A for Panel Method. Once linear distribution method was implemented it was really easy to implement method
+for constant distribution. The dynamic change in Vortex Distribution led to change in structure of Simulator from continious
+to stepwise simulation.
+
+\section{Results}
+        The results are shown in the pictures. 
+\begin{itemize}
+    \item The first figure give the flow 
+        across a circular cylinder using Vortex Panel Method with linear distribution in panel.
+    \item The second figure show the trace of vortex at a distance 1.25 unit form cylinder using Vortex Panel Method.
+    \item The third picture the vortex at a distance of 1.25 unit but using method of images.
+    \item Finally the fourth picture show loglog plot of error between vortex panel method and doublet approach. It obvious red show linear distribution and blue shows the constant distribution.
+\end{itemize}
+\includegraphics[width=8cm]{figure_1}
+\includegraphics[width=8cm]{vortex_panel_method}
+\includegraphics[width=8cm]{method_of_images}
+\includegraphics[width=8cm]{error}
+\end{document}
