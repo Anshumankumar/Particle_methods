@@ -12,10 +12,10 @@ def discretise(func,startx,endx):
     currentY = func(startx)
     pointlist.append(complex(currentX,currentY)) 
     while(sign*currentX < sign*endx):
-        nextX = currentX + sign*0.0001
+        nextX = currentX + sign*0.001
         if (sign*nextX > sign*endx):
             nextX = endx
-        slope = abs(func(nextX)-func(currentX))/0.0001
+        slope = abs(func(nextX)-func(currentX))/0.001
         delx = 0.05/math.sqrt(1+pow(slope,2))
         currentX = currentX+ sign*delx
         if (sign*currentX > sign*endx):

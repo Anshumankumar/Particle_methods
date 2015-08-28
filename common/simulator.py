@@ -15,6 +15,8 @@ class Simulator:
     def parse_from_file(self,elemArray):
         self.elementArray = deepcopy(elemArray)
 
+    def get_elements(self):
+        return self.elementArray
     def take_hard_code_value(self):
         pos = complex(1,0)
         pos2 = complex(-1,0)

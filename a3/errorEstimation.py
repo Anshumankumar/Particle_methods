@@ -8,26 +8,29 @@ from matCreator import MatCreatorC
 import flows as f
 from simulator  import Simulator
 import plotter as p
+import math
 
-
-def addTracerPoint(pFlowArray):
-    for i in range(-20,20,4):
-        pos = complex(-2,i/10.0)
-        pFlowArray.append(f.tracer(pos,1,1,False))
+getPoint(delr)
+    pointMat = []
+    for i in range(720):
+        angle = i*(cmath.pi)/360
+        pointMat.append((1+delr)*cmath.exp(1j*angle))
+    return pointMat
 
 if __name__ == '__main__':
-    print('Assignment 3')
+    print('Assignment 3 Error Comparision')
     pFlowArray = []
     pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
-   # pFlowArray.append(f.Vortex(complex(-1.25,0),4,1,False))
-    pointlist = [[complex(1,1),complex(1,-1),complex(-1,-1),complex(-1,1)]]
     pointlist = cylinder()
     matCr=MatCreator(pointlist,pFlowArray)
-    addTracerPoint(pFlowArray)
-    length = len(pFlowArray)
     pFlowArray.extend(matCr.getMatVP())
     
-    
+    pFlowArray = []
+    pFlowArray2.append(f.Uniform(complex(-100,0),1,1,True))
+    matCrC=MatCreator(pointlist,pFlowArray2)
+    pFlowArray.extend(matCrC.getMatVP())
+   
+    pFlowArray3
     sim = Simulator()
     sim.parse_from_file(pFlowArray)
     timelimit = 5

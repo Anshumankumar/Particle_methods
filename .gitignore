@@ -1,4 +1,6 @@
 *.mp4
 *.pdf
 *.png
+*.*.swo
+*.*.swp
 __pycache__

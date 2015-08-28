@@ -50,6 +50,9 @@ class FlowElement:
             except ZeroDivisionError:
                 return complex(0,0)
         return vel
+    
+    def update_strength(self,strength):
+        self._strength = strength
 
 class tracer(FlowElement):
     def compute_potential(self,outputPosition):
@@ -101,7 +104,7 @@ class Vortex(FlowElement):
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
-        return (complex(0,-1)*self._strength/(
+        return 1/(2*m.pi)*(complex(0,-1)*self._strength/(
             outputPosition-self._position)).conjugate()
 
     def get_color(self):
@@ -127,7 +130,9 @@ class VortexPanel(FlowElement):
         self.endPoint = position[1]
         midPoint = (position[0]+position[1])/2
         super(VortexPanel,self).__init__(midPoint,strength,vel,fixed)
-    
+
+class VortexLPanel(VortexPanel):
+    @FlowElement.decoVel
     def compute_vel(self,position):
         return self._strength[0]*self.getStrengthC1(position)+ \
                self._strength[1]*self.getStrengthC2(position)
@@ -135,17 +140,24 @@ class VortexPanel(FlowElement):
     def getStrengthC1(self,position):
         tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
         return ((-0.5j/cmath.pi)*((tranZ/self.length -1)*cmath.log((
-                tranZ-self.length)/tranZ) +1) \
-                *-cmath.exp(complex(0,-1)*self.phase)) \
-            .   conjugate()
+                tranZ-self.length)/tranZ) +1)) \
+                .conjugate()*cmath.exp(1j*self.phase)
 
     def getStrengthC2(self,position):
         tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
         return ((0.5j/cmath.pi)*((tranZ/self.length)*cmath.log((
-                tranZ-self.length)/tranZ) +1) \
-                *-cmath.exp(-1j*self.phase)) \
-                .conjugate()
-     
+                tranZ-self.length)/tranZ) +1)) \
+                .conjugate()*cmath.exp(1j*self.phase) 
+    
+class VortexCPanel(VortexPanel):
+    @FlowElement.decoVel
+    def compute_vel(self,position):
+        tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
+        return (self._strength*(0.5j/cmath.pi)*cmath.log((
+            tranZ-self.length)/tranZ)).conjugate()* \
+            cmath.exp(1j*self.phase)
+
+
 class Uniform(FlowElement):
     def compute_vel(self,outputPosition):
          return (complex(self._strength,0))
