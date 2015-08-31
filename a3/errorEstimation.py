@@ -27,11 +27,12 @@ def getVel(currentPoints,pArray):
     return VelMat
 
 def getError(velA,velB):
-    error = 0
+    error = []
     for elem1,elem2 in zip(velA,velB):
         delv = abs(elem2 - elem1)
-        if (delv > error):
-            error = delv
+        error.append(delv)
+    #    if (delv > error):
+     #       error = delv
     return error
 
 if __name__ == '__main__':

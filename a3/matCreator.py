@@ -89,7 +89,7 @@ class MatCreator:
             pVector = cmath.exp(1j*(panel.phase+cmath.pi/2))
             self.matB[k] = self.dotP(self.matB[k],pVector)
             k = k+1
-    
+ 
     def updateMatS(self):
         self.matS = self.inverseA*self.matB2
         self.matS = np.array(self.matS.transpose())[0].tolist()

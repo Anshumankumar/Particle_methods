@@ -12,10 +12,21 @@ def getImage(element):
     radius = abs(currentPos)
     angle = cmath.phase(currentPos)
     radius2 = 1/radius
-    strength2 = -strength/radius
+    strength2 = -strength
     pos2 = radius2*cmath.exp(1j*angle)
     rElement = f.Vortex(pos2,strength2,1,False)
     return rElement
+
+def getImage2(element):
+    currentPos = element.get_pos()
+    radius = abs(currentPos)
+    angle = cmath.phase(currentPos)
+    radius2 = 1/radius
+    strength2 = strength
+    pos2 = complex(0,0)
+    rElement = f.Vortex(pos2,strength2,1,False)
+    return rElement
+
 
 if __name__ == '__main__':
     print('Assignment 3')
@@ -28,6 +39,7 @@ if __name__ == '__main__':
     time = 0
     while (time < timelimit):
         pFlowArray.append(getImage(pFlowArray[0]))
+        pFlowArray.append(getImage2(pFlowArray[0]))
         sim.parse_from_file(pFlowArray)
         sim.runSingle()
         time = time +0.01

@@ -18,12 +18,12 @@ def addTracerPoint(pFlowArray):
 if __name__ == '__main__':
     print('Assignment 3')
     pFlowArray = []
-    pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
-   # pFlowArray.append(f.Vortex(complex(-1.25,0),4,1,False))
+    #pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
+    pFlowArray.append(f.Vortex(complex(-1.25,0),4,1,False))
     pointlist = [[complex(1,1),complex(1,-1),complex(-1,-1),complex(-1,1)]]
     pointlist = cylinder()
     matCr=MatCreator(pointlist,pFlowArray)
-    addTracerPoint(pFlowArray)
+    #addTracerPoint(pFlowArray)
     length = len(pFlowArray)
     pFlowArray.extend(matCr.getMatVP())
     
@@ -44,6 +44,6 @@ if __name__ == '__main__':
     plotter = p.ParticlePlotter((-2,2),(-2,2))
     plotter.update(data,colors)
     filename = "temp"
-    #plotter.run(filename,True,False,False)
-    plotter.run(filename,False,True,False)
+    plotter.run(filename,True,False,False)
+    #plotter.run(filename,False,True,False)
 
