@@ -6,6 +6,9 @@ UPDATE_FRAMES = 4
 SIM_TIME = 5
 MODE = 'RK'
 
+def doNothing():
+    pass
+
 class Simulator:
     def __init__(self):
         self.pointArray = []
@@ -13,8 +16,8 @@ class Simulator:
         self.counter = 0
 
     def parse_from_file(self,elemArray):
-        self.elementArray = deepcopy(elemArray)
-
+        self.elementArray = elemArray
+    
     def get_elements(self):
         return self.elementArray
     def take_hard_code_value(self):
@@ -27,21 +30,22 @@ class Simulator:
             pos = complex(0,i)
             self.elementArray.append(tracer(pos,1))
 
-    def run(self,   timelimit):
+    def run(self, timelimit, updateStrength=doNothing):
         print('Flow Simulator for Potential Flows')
         time = 0.0
         while (time < timelimit):
-            self.runSingle()
+            self.runSingle(updateStrength)
             time = time + TIME_STEP
         return self.getFinal()
     
-    def runSingle(self):
+    def runSingle(self,updateStrength=doNothing):
         tempPointArray = []
         self.counter = self.counter+1;
         if MODE == 'EULER':
             self.update_euler()
+            updateStrength()
         else:
-            self.update_rk()
+            self.update_rk(updateStrength)
         if (self.counter%UPDATE_FRAMES == 0):
             for element in self.elementArray:
                 tempPointArray.append(element.get_pos())
@@ -65,15 +69,16 @@ class Simulator:
             tempVelArray.append(tempVel)
         return tempVelArray
 
-    def update_rk(self):
-        elementArray2 =  deepcopy(self.elementArray)
-        tempVelArray =  self.vel_update(elementArray2)
-        for i in range(len(elementArray2)):
-            elementArray2[i].change_pos(tempVelArray[i],TIME_STEP/2) 
-        tempVelArray =  self.vel_update(elementArray2)
+    def update_rk(self,updateStrength):
+        tempVelArray =  self.vel_update(self.elementArray)
         for i in range(len(self.elementArray)):
-            self.elementArray[i].change_pos(tempVelArray[i],TIME_STEP) 
-               
+            self.elementArray[i].change_pos(tempVelArray[i],TIME_STEP/2)
+        updateStrength()
+        tempVelArray2 =  self.vel_update(self.elementArray)
+        for i in range(len(self.elementArray)):
+            self.elementArray[i].change_pos(tempVelArray2[i]-tempVelArray[i]/2,TIME_STEP) 
+        updateStrength() 
+
     def update_euler(self):
         tempVelArray =  self.vel_update(self.elementArray)
         for i in range(len(self.elementArray)):

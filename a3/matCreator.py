@@ -8,6 +8,7 @@ import numpy as np
 
 class MatCreator:
     def __init__(self,pointlist,flowArray=[]):
+        self.t = 0
         self.vortexList = []
         self.updatePointMat(pointlist)
         self.updateFlows(flowArray)
@@ -24,8 +25,12 @@ class MatCreator:
         self.updateMatA()
         self.inverseA = np.matrix(np.linalg.pinv(self.matA))
     
-    def updateFlows(self,flowArray):
-        self.flowArray = flowArray
+    def updateFlows(self,flowArray=None):
+        if flowArray != None:
+            self.flowArray = []
+            for element in flowArray:
+                self.flowArray.append(element)
+        self.t = self.t +1
         self.updateMatB()
         self.matB2 = np.matrix(self.matB).transpose()
         self.updateMatS()
@@ -50,8 +55,8 @@ class MatCreator:
                 nextp = (currentp+1)%len(objects)
                 strength = [1,1]
                 pos = [objects[currentp],objects[nextp]]
-                self.vortexList.append(f.VortexLPanel(pos,strength,0+0j,True))
-        
+                self.vortexList.append(f.VortexLPanel(pos,strength,0+0j,False))
+    
     def updateMatA(self):
         start,current = 0,0
         for panel in self.vortexList:
@@ -89,11 +94,10 @@ class MatCreator:
             pVector = cmath.exp(1j*(panel.phase+cmath.pi/2))
             self.matB[k] = self.dotP(self.matB[k],pVector)
             k = k+1
- 
+
     def updateMatS(self):
         self.matS = self.inverseA*self.matB2
         self.matS = np.array(self.matS.transpose())[0].tolist()
-
     def updateMatVP(self):
         start,current = 0,0
         for panel in self.vortexList:

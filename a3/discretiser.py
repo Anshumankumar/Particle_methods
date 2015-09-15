@@ -29,8 +29,10 @@ def circle(x):
     return  math.sqrt(1-pow(x,2))
 
 def line(x):
-    return 0
+    return -0.5*x+0.5;
 
+def line2(x):
+    return 0.5*x-0.5;
 def circle2(x):
     return  -math.sqrt(1-pow(x,2))
 
@@ -39,7 +41,8 @@ def cylinder():
     listSet.append(discretise(circle,-1,1))
 #    listSet.append(discretise(circle,0,0.5))
  #   listSet.append(discretise(circle,0.5,1))
-  #  listSet.append(discretise(line,1,-1))
+#    listSet.append(discretise(line,0,1))
+#    listSet.append(discretise(line2,1,0))
     listSet.append(discretise(circle2,1,-1))
     k = len(listSet)-1
     i = 0

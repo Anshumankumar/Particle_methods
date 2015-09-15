@@ -54,7 +54,7 @@ class FlowElement:
     def update_strength(self,strength):
         self._strength = strength
 
-class tracer(FlowElement):
+class Tracer(FlowElement):
     def compute_potential(self,outputPosition):
         return complex(0,0)
 
