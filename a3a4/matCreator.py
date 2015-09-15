@@ -55,7 +55,7 @@ class MatCreator:
                 nextp = (currentp+1)%len(objects)
                 strength = [1,1]
                 pos = [objects[currentp],objects[nextp]]
-                self.vortexList.append(f.VortexLPanel(pos,strength,0+0j,False))
+                self.vortexList.append(f.VortexLPanel(pos,strength,0+0j,True))
     
     def updateMatA(self):
         start,current = 0,0

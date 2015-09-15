@@ -16,15 +16,14 @@ def addTracerPoint(pFlowArray):
         pFlowArray.append(f.Tracer(pos,1,1,False))
 
 if __name__ == '__main__':
-    print('Assignment 3')
+    print('Flow pass a circular cylinder')
     pFlowArray = []
-    #pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
-    pFlowArray.append(f.Vortex(complex(-1.25,0),4,1,False))
-    #pFlowArray.append(f.Vortex(complex(1.25,1),100,1,False))
-    pointlist = [[complex(1,1),complex(1,-1),complex(-1,-1),complex(-1,1)]]
+
+
+    pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
     pointlist = cylinder()
     matCr=MatCreator(pointlist,pFlowArray)
-   # addTracerPoint(pFlowArray)
+    addTracerPoint(pFlowArray)
     length = len(pFlowArray)
     pFlowArray.extend(matCr.getMatVP())
     sim = Simulator()
@@ -34,5 +33,5 @@ if __name__ == '__main__':
     plotter.update(data,colors)
     filename = "temp"
     #plotter.run(filename,True,False,False)
-    plotter.run(filename,False,True,True)
+    plotter.run(filename,False,True,False)
 

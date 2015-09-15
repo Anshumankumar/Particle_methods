@@ -1,16 +1,15 @@
 from flows import *
 from copy import deepcopy
 
-TIME_STEP = 0.01
-UPDATE_FRAMES = 4
-SIM_TIME = 5
-MODE = 'RK'
-
 def doNothing():
     pass
 
 class Simulator:
-    def __init__(self):
+    def __init__(self,timestep =0.01,uFrames = 4,time=5,mode='RK'):
+        self.timestep = timestep
+        self.uFrames = uFrames
+        self.time = time
+        self.mode = mode
         self.pointArray = []
         self.elementArray = []
         self.counter = 0
@@ -35,18 +34,18 @@ class Simulator:
         time = 0.0
         while (time < timelimit):
             self.runSingle(updateStrength)
-            time = time + TIME_STEP
+            time = time + self.timestep
         return self.getFinal()
     
     def runSingle(self,updateStrength=doNothing):
         tempPointArray = []
         self.counter = self.counter+1;
-        if MODE == 'EULER':
+        if self.mode == 'EULER':
             self.update_euler()
             updateStrength()
         else:
             self.update_rk(updateStrength)
-        if (self.counter%UPDATE_FRAMES == 0):
+        if (self.counter%self.uFrames == 0):
             for element in self.elementArray:
                 tempPointArray.append(element.get_pos())
             self.pointArray.append(tempPointArray)
@@ -72,14 +71,14 @@ class Simulator:
     def update_rk(self,updateStrength):
         tempVelArray =  self.vel_update(self.elementArray)
         for i in range(len(self.elementArray)):
-            self.elementArray[i].change_pos(tempVelArray[i],TIME_STEP/2)
+            self.elementArray[i].change_pos(tempVelArray[i],self.timestep/2)
         updateStrength()
         tempVelArray2 =  self.vel_update(self.elementArray)
         for i in range(len(self.elementArray)):
-            self.elementArray[i].change_pos(tempVelArray2[i]-tempVelArray[i]/2,TIME_STEP) 
+            self.elementArray[i].change_pos(tempVelArray2[i]-tempVelArray[i]/2,self.timestep) 
         updateStrength() 
 
     def update_euler(self):
         tempVelArray =  self.vel_update(self.elementArray)
         for i in range(len(self.elementArray)):
-            self.elementArray[i].change_pos(tempVelArray[i],TIME_STEP) 
+            self.elementArray[i].change_pos(tempVelArray[i],self.timestep) 

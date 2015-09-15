@@ -1,45 +1,47 @@
 import cmath
 import math as m
 class TestElement:
-    def __init__(self,position,strength,vel=complex(0,0),fixed =False):
-        self._position = position
-        self._vel = vel
-        self._strength = strength
+    def __init__(self,position,strength,vel=complex(0,0),fixed =False,radius=0.01):
+        self.radius = radius
+        self.position = position
+        self.vel = vel
+        self.strength = strength
         self.fixed = fixed
         self.time = 0
 
     def change_pos(self,vel,timestep):
-        self._vel = vel;
+        self.vel = vel;
         self.time = self.time + timestep
         if (self.fixed ==False):
-            self._position = complex(m.cos(-1/2*self.time),m.sin(-1/2*self.time))
+            self.position = complex(m.cos(-1/2*self.time),m.sin(-1/2*self.time))
 
     def compute_vel(self,a):
         return complex(0,0)
     
     def get_pos(self):
-        return self._position
+        return self.position
     
     def get_color(self):
         return 'y'
-
+    
 class FlowElement:
-    def __init__(self,position,strength,vel=complex(0,0),fixed =False):
-        self._position = position
-        self._vel = vel
-        self._strength = strength
+    def __init__(self,position,strength,vel=complex(0,0),fixed =False,radius = 0.01):
+        self.position = position
+        self.radius = radius
+        self.vel = vel
+        self.strength = strength
         self.fixed = fixed
     def change_pos(self,vel,timestep):
-        self._vel = vel;
+        self.vel = vel;
         if (self.fixed ==False):
-            self._position = self._position + self._vel*timestep
+            self.position = self.position + self.vel*timestep
 
     
     def get_pos(self):
-        return self._position
+        return self.position
 
     def print_pos(self):
-        print(self._position)
+        print(self.position)
 
     def get_color(self):
         return 'y'
@@ -52,7 +54,21 @@ class FlowElement:
         return vel
     
     def update_strength(self,strength):
-        self._strength = strength
+        self.strength = strength
+
+    def __eq__(self,b):
+        if (
+                self.position == b.position and
+                self.radius == b.radius and
+                self.vel == b.vel and
+                self.strength == b.strength and
+                self.fixed == b.fixed
+            ):
+            return True
+        else:
+            return False
+            
+
 
 class Tracer(FlowElement):
     def compute_potential(self,outputPosition):
@@ -66,21 +82,21 @@ class Tracer(FlowElement):
 
 class Source(FlowElement):    
     def compute_potential(self,outputPosition):
-        return self._strength*cmath.log(outputPosition -self._position)
+        return self.strength*cmath.log(outputPosition -self.position)
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
-            return (self._strength/(outputPosition-self._position)).conjugate()
+            return (self.strength/(outputPosition-self.position)).conjugate()
     def get_color(self):
         return 'k'
 
 class Sink(FlowElement):    
     def compute_potential(self,outputPosition):
-        return self._strength*cmath.log(outputPosition -self._position)
+        return self.strength*cmath.log(outputPosition -self.position)
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
-        return (-self._strength/(outputPosition-self._position)).conjugate()
+        return (-self.strength/(outputPosition-self.position)).conjugate()
     def get_color(self):
         return 'm'
 
@@ -88,11 +104,11 @@ class Sink(FlowElement):
 
 class Doublet(FlowElement):    
     def compute_potential(self,outputPosition):
-        return self._strength*cmath.log(outputPosition -self._position)
+        return self.strength*cmath.log(outputPosition -self.position)
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
-        return (-self._strength/pow((outputPosition-self._position),2)).conjugate()
+        return (-self.strength/pow((outputPosition-self.position),2)).conjugate()
 
     def get_color(self):
         return 'g'
@@ -100,30 +116,26 @@ class Doublet(FlowElement):
 
 class Vortex(FlowElement):    
     def compute_potential(self,outputPosition):
-        return self._strength*cmath.log(outputPosition -self._position)
+        return self.strength*cmath.log(outputPosition -self.position)
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
-        return 1/(2*m.pi)*(complex(0,-1)*self._strength/(
-            outputPosition-self._position)).conjugate()
+        return 1/(2*m.pi)*(complex(0,-1)*self.strength/(
+            outputPosition-self.position)).conjugate()
 
     def get_color(self):
         return 'b'
 
 
 class VortexBlobKrasny(Vortex):
-    def __init__(self,position,strength,vel=complex(0,0),fixed =False,
-            delta = 0.1):
-        self.delta = delta;
-        super(Vortex,self).__init__(position,strength,vel,fixed)
     def compute_vel(self,outputPosition):
-        radius = abs(outputPosition-self._position)
-        kernelConst = pow(radius,2)/(pow(self.delta,2)+pow(radius,2))
+        d = abs(outputPosition-self.position)
+        kernelConst = pow(d,2)/(pow(self.radius,2)+pow(d,2))
         return kernelConst*super(
                 VortexBlobKrasny,self).compute_vel(outputPosition)
 
 class VortexPanel(FlowElement):
-    def __init__(self,position,strength,vel=complex(0,0),fixed =False):
+    def __init__(self,position,strength,vel=complex(0,0),fixed =False,radius=1):
         self.length = abs(position[0]-position[1])
         self.phase = cmath.phase(position[1]-position[0])
         self.startPoint = position[0]
@@ -134,8 +146,8 @@ class VortexPanel(FlowElement):
 class VortexLPanel(VortexPanel):
     @FlowElement.decoVel
     def compute_vel(self,position):
-        return self._strength[0]*self.getStrengthC1(position)+ \
-               self._strength[1]*self.getStrengthC2(position)
+        return self.strength[0]*self.getStrengthC1(position)+ \
+               self.strength[1]*self.getStrengthC2(position)
 
     def getStrengthC1(self,position):
         tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
@@ -153,14 +165,14 @@ class VortexCPanel(VortexPanel):
     @FlowElement.decoVel
     def compute_vel(self,position):
         tranZ = (position-self.startPoint)*cmath.exp(-1j*self.phase)
-        return (self._strength*(0.5j/cmath.pi)*cmath.log((
+        return (self.strength*(0.5j/cmath.pi)*cmath.log((
             tranZ-self.length)/tranZ)).conjugate()* \
             cmath.exp(1j*self.phase)
 
 
 class Uniform(FlowElement):
     def compute_vel(self,outputPosition):
-         return (complex(self._strength,0))
+         return (complex(self.strength,0))
 
 def update(test):
     for elements in test:

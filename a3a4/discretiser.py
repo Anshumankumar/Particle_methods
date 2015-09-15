@@ -58,7 +58,7 @@ def cylinder():
 
     return listSet 
 
-def cylinder2(noOfPoints=36,r=1):
+def cylinder2(noOfPoints=48,r=1):
     pointMat = []
     angleFactor = 2*math.pi/noOfPoints
     for i in range(noOfPoints):
