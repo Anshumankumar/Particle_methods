@@ -2,6 +2,7 @@
 #So that its easy for them 
 
 import math
+import cmath
 
 def discretise(func,startx,endx):
     sign = 1;
@@ -57,5 +58,22 @@ def cylinder():
 
     return listSet 
 
+def cylinder2(noOfPoints=36,r=1):
+    pointMat = []
+    angleFactor = 2*math.pi/noOfPoints
+    for i in range(noOfPoints):
+        angle = i*angleFactor
+        pointMat.append((r)*cmath.exp(1j*angle))
+    return [pointMat]
+
+def test_cylinder2():
+    pointList = cylinder2(2)
+    pList =  [[cmath.exp(0j),cmath.exp(1j*math.pi)]]
+    assert (pointList == pList)
+    pointList2 = cylinder2(4)
+    pList = [[cmath.exp(0j),cmath.exp(1j*math.pi/2),
+             cmath.exp(1j*math.pi),cmath.exp(3j*math.pi/2)]]
+
 if __name__ == '__main__':
-    cylinder()
+    cylinder2()
+

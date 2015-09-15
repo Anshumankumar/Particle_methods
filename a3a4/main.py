@@ -2,7 +2,7 @@
 import sys
 sys.path.insert(0, '../common')
 
-from discretiser import cylinder
+from discretiser import cylinder2 as cylinder
 from matCreator import MatCreator
 from matCreator import MatCreatorC
 import flows as f
