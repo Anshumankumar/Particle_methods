@@ -66,12 +66,12 @@ class ParticlePlotter:
         
         if animationFlag == True:
             ani = animation.FuncAnimation(self.fig, self.animationupdate,
-                save_count=200,blit=False, interval=1,
+                save_count=40,blit=False, interval=1,
                 init_func=self.init)
        
         # Set up formatting for the movie files
             Writer = animation.writers['ffmpeg']
-            writer = Writer(fps=15, metadata=dict(artist='Me'),
+            writer = Writer(fps=1, metadata=dict(artist='Me'),
                     bitrate=1800)
             if saveVideo == True:
                 ani.save(filename +'.mp4', writer=writer)

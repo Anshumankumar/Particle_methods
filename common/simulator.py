@@ -5,36 +5,29 @@ def doNothing():
     pass
 
 class Simulator:
-    def __init__(self,timestep =0.01,uFrames = 4,time=5,mode='RK'):
+    def __init__(self,timestep =0.01,uFrames = 4,mode='RK'):
         self.timestep = timestep
         self.uFrames = uFrames
-        self.time = time
         self.mode = mode
         self.pointArray = []
         self.elementArray = []
         self.counter = 0
 
-    def parse_from_file(self,elemArray):
+    def updateElements(self,elemArray):
         self.elementArray = elemArray
     
     def get_elements(self):
         return self.elementArray
-    def take_hard_code_value(self):
-        pos = complex(1,0)
-        pos2 = complex(-1,0)
-        pos3 = complex(-1,1)
-        self.elementArray =  [Source(pos,1) ,Sink(pos2,1)]
-        self.elementArray =  [Vortex(pos,1) ,Vortex(pos2,1)]
-        for i in range(-10,10,2):
-            pos = complex(0,i)
-            self.elementArray.append(tracer(pos,1))
 
-    def run(self, timelimit, updateStrength=doNothing):
+    def run(self,timelimit,updateStrength=doNothing):
         print('Flow Simulator for Potential Flows')
-        time = 0.0
-        while (time < timelimit):
+        ctime = 0.0
+        while (ctime < timelimit):
+            ctime = ctime + self.timestep
+            print("Simulation time", ctime)
+            print("No of Particles",len(self.elementArray))
             self.runSingle(updateStrength)
-            time = time + self.timestep
+
         return self.getFinal()
     
     def runSingle(self,updateStrength=doNothing):
@@ -64,7 +57,8 @@ class Simulator:
                 tempVelArray.append(tempVel)
                 continue
             for element2 in elementArray:
-                tempVel = tempVel + element2.compute_vel(element.get_pos())
+                tempVel = tempVel + element2.compute_vel(
+                            element.get_pos())
             tempVelArray.append(tempVel)
         return tempVelArray
 

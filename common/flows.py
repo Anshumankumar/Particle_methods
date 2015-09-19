@@ -120,11 +120,16 @@ class Vortex(FlowElement):
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
+        if self.position == outputPosition:
+            return complex(0,0)
         return 1/(2*m.pi)*(complex(0,-1)*self.strength/(
             outputPosition-self.position)).conjugate()
 
     def get_color(self):
-        return 'b'
+        if (self.strength >0):
+            return 'b'
+        else:
+            return 'r'
 
 
 class VortexBlobKrasny(Vortex):
