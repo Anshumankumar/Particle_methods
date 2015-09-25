@@ -120,6 +120,7 @@ class Vortex(FlowElement):
     
     @FlowElement.decoVel
     def compute_vel(self,outputPosition):
+
         if self.position == outputPosition:
             return complex(0,0)
         return 1/(2*m.pi)*(complex(0,-1)*self.strength/(

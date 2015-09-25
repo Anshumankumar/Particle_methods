@@ -27,7 +27,6 @@ class Simulator:
             print("Simulation time", ctime)
             print("No of Particles",len(self.elementArray))
             self.runSingle(updateStrength)
-
         return self.getFinal()
     
     def runSingle(self,updateStrength=doNothing):

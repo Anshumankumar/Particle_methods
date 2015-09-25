@@ -226,3 +226,4 @@ def testRandomWalk():
     r = Rvm([])
     r.randomWalk(v,0.002,0.1 )
     assert(abs(v.position) >= 1.00)
+
