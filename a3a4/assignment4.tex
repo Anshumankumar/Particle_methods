@@ -1,0 +1,156 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[font={small,it}]{caption}
+
+\graphicspath{ {images/} }
+\title {Particle Method Assignment 4 \\
+Flow pass a circular Cylinder} 
+\author {Anshuman kumar \\
+Roll no.  120010036}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+The random vortex method is used to simulate the flow across a circular cylinder. 
+The simulation is done using two step. First is Advection and second is diffusion.
+The diffusion is simulated using the Random walk method. The timestep used
+for this assigment was 0.1 and maximum strength for vortex blob was also 
+0.1.The total simulation is done for three second. Being a O(n2) algorithm.
+It becomes computationally infeasible for computation beyond that. Finally drag has been calculated after that using vortex moment method.
+
+\section{Results}
+See the flow\_pass\_cylinder.mp4 in the same directory to see the video.
+The first six figure shows the feild across full cylinder. The next six shows
+The Quater Cylinder for different time period.
+
+Then we have the vortex particles 
+at diffrent instant.Different colour are used to show positive and negative strenght. Finally the last plot shows the drag with time.
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{5full}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Full cylinder V feild at 0.5 sec} 
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{10full}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Full cylinder V feild at 1.0 sec} 
+\end{minipage}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{15full}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Full cylinder V feild at 1.5 sec} 
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{20full}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Full cylinder V feild at 2.0 sec} 
+\end{minipage}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{25full}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Full cylinder V feild at 2.5 sec} 
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{30full}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Full cylinder V feild at 3.0 sec} 
+\end{minipage}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{5quiver}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Quater cylinder V feild at 0.5 sec} 
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{10quiver}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Quater cylinder V feild at 1.0 sec} 
+\end{minipage}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{15quiver}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Quater cylinder V feild at 1.5 sec} 
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{20quiver}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Quater cylinder V feild at 2.0 sec} 
+\end{minipage}
+\end{figure}
+
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{25quiver}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Quater cylinder V feild at 2.5 sec} 
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=.9\linewidth]{30quiver}
+  \captionsetup{width=0.8\textwidth}
+  \caption{Quater cylinder V feild at 3.0 sec} 
+\end{minipage}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\linewidth]{cylinder1}
+    \caption{The vortex blobs at 1sec} 
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\linewidth]{cylinder2}
+    \caption{The vortex blobs at 1sec} 
+\end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=.6\linewidth]{cylinder3}
+    \caption{The vortex blobs at 1sec} 
+\end{figure}
+
+
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=.9\linewidth]{drag}
+    \caption{The drag variation with time} 
+\end{figure}
+
+\end{document}

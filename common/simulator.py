@@ -5,7 +5,7 @@ def doNothing():
     pass
 
 class Simulator:
-    def __init__(self,timestep =0.01,uFrames = 4,mode='RK'):
+    def __init__(self,timestep =0.1,uFrames = 400,mode='RK'):
         self.timestep = timestep
         self.uFrames = uFrames
         self.mode = mode

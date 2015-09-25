@@ -19,22 +19,10 @@ def importfile():
     except ImportError:
         print("No such Import exist")
         exit()
-
-#Overriding the Simulator Variables
-    simulator.TIME_STEP = elemFile.TIME_STEP
-    simulator.UPDATE_FRAMES = elemFile.UPDATE_FRAMES
-    simulator.SIM_TIME = elemFile.SIM_TIME
-    try:
-        simulator.MODE = elemFile.MODE
-    except AttributeError:
-        simulator.MODE = 'RK'
     return elemFile,filename
 
 if __name__ == '__main__':
     elemFile,filename = importfile()
     sim = Simulator()
-    sim.parse_from_file(elemFile.Array)
-    data,colors = sim.run(simulator.SIM_TIME)
-    plotter = p.ParticlePlotter((-2,2),(-2,2))
-    plotter.update(data,colors)
-    plotter.run(filename,False,True,False)
+    sim.updateElements(elemFile.Array)
+    data,colors = sim.run(3)

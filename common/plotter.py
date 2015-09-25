@@ -42,7 +42,7 @@ class ParticlePlotter:
 
         particlesX = np.array(elemPointsX)
         self.particles.set_animated(True)
-        self.particles =  self.ax.scatter(particlesX[:,0],particlesX[:,1],c = self.colors)
+        self.particles =  self.ax.scatter(particlesX[:,0],particlesX[:,1],c = self.colors,s =8,edgecolors='none')
        # self.line1, =  self.ax.plot(particlesX[:,0],particlesX[:,1])
         return self.particles
 
@@ -66,7 +66,7 @@ class ParticlePlotter:
         
         if animationFlag == True:
             ani = animation.FuncAnimation(self.fig, self.animationupdate,
-                save_count=40,blit=False, interval=1,
+                save_count=60,blit=False, interval=1,
                 init_func=self.init)
        
         # Set up formatting for the movie files

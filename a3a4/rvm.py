@@ -2,7 +2,7 @@
 import sys
 sys.path.insert(0, '../common')
 
-import numpy
+from numpy import linspace,meshgrid,array,reshape,random
 import math
 import flows as f
 from matCreator import MatCreator
@@ -20,10 +20,11 @@ def component(a,c):
 
 class Rvm(object):
 
-    def __init__(self,flows,plotFeildFlag = False):
+    def __init__(self,flows,gammaMax = 0.1,plotFeildFlag = False):
         self.plotFeildFlag = plotFeildFlag
         self.flows = flows
-        self.sim = Simulator(timestep = 0.1,uFrames = 1) 
+        self.sim = Simulator(timestep = 0.1,uFrames = 1)
+        self.gammaMax = gammaMax
         self.createPoints()
         self.momentArray =[]
         if (self.plotFeildFlag == True):
@@ -57,12 +58,12 @@ class Rvm(object):
         return self.momentArray
 
     def initializeGrid(self):
-        xx = numpy.linspace(-2,2,40)
-        yy = numpy.linspace(-2,2,40)
-        self.xx,self.yy = numpy.meshgrid(xx,yy)
+        xx = linspace(-2,2,40)
+        yy = linspace(-2,2,40)
+        self.xx,self.yy = meshgrid(xx,yy)
         self.x,self.y = self.xx.ravel(),self.yy.ravel()
         self.z = self.x+1j*self.y
-        self.x,self.y = numpy.meshgrid(xx,yy)
+        self.x,self.y = meshgrid(xx,yy)
     
     def createVortexBlob(self):
         positions = self.vortexBlobPoints
@@ -79,12 +80,12 @@ class Rvm(object):
             VortexBlobArray.append(vortexBlob)
         return VortexBlobArray
 
-    def saveQuiverPlot():
+    def saveQuiverPlot(self):
         self.counter = self.counter +1
         if (self.counter%10 == 0):
             t = self.getVel(self.z,self.currentFlowArray)
-            t = numpy.array(t)
-            t = numpy.reshape(t,[-1,len(self.y)])
+            t = array(t)
+            t = reshape(t,[-1,len(self.y)])
             ux = t.real
             vy = t.imag
             matplotlib.pyplot.quiver(self.x,self.y,ux,vy)
@@ -108,7 +109,8 @@ class Rvm(object):
         vortexBlobArray = self.createVortexBlob()
         smallvortexBlobArray  = []
         for element in vortexBlobArray:
-            smallvortexBlobArray.extend(self.elemDivider(element,0.1))
+            maxStr =  self.vortexPList[0].length*self.gammaMax 
+            smallvortexBlobArray.extend(self.elemDivider(element,maxStr))#self.gammaMax*self.vortexPList[0].length))
         self.currentFlowArray.extend(smallvortexBlobArray)
         self.flows = self.currentFlowArray[len(self.vortexPList):]
         self.matCr.updateFlows(self.flows)
@@ -136,7 +138,6 @@ class Rvm(object):
         return data
 
     def elemDivider(self,elem,maxStrength):
-        #Take care of sign of strength
         sign = elem.strength/abs(elem.strength)
         strength = abs(elem.strength)
         elemList = []
@@ -153,23 +154,23 @@ class Rvm(object):
         if element.fixed == True:
             return
         # Take care of the error from Advection
-        if abs(element.position) <1.04:
-            element.position = 1.04*element.position/abs(element.position)
+        if abs(element.position) <1.03:
+            element.position = 1.03*element.position/abs(element.position)
         
         mean = [0,0]
         cv = sigma/timestep
         covariance = [[cv,0],[0,cv]]
-        vtemp = numpy.random.multivariate_normal(mean,covariance)
+        vtemp = random.multivariate_normal(mean,covariance)
         v = vtemp[0] + 1j*vtemp[1]
         position = element.position+v*timestep
         posVector = position/abs(position)
         
         #Reflection the velocity
-        if (abs(position) <= 1.04):
+        if (abs(position) <= 1.03):
             v = v - 2*(posVector.real*v.real+v.imag*posVector.imag)*posVector
       
         #Very Rare Case But can happen, due to precesion
-        if(abs( element.position) < 1.04):
+        if(abs( element.position) < 1.03):
             v =0
         element.change_pos(v,timestep)
 
@@ -185,9 +186,9 @@ def getDrag(mA):
 def plotDrag(momentArray,time):
     dragArray = getDrag(momentArray)
     print(dragArray)
-    t = numpy.linspace(0.1,(time-0.3),len(dragArray))
+    t = linspace(0.1,(time-0.3),len(dragArray))
     tck = interpolate.splrep(t,dragArray, s=0)
-    t = numpy.linspace(0.1,(time-0.3),200)
+    t = linspace(0.1,(time-0.3),200)
     dNew = interpolate.splev(t, tck, der=0)
     matplotlib.pyplot.plot(t,dNew)
     matplotlib.pyplot.show()
@@ -196,16 +197,16 @@ def plotDrag(momentArray,time):
 if __name__ == '__main__':
     pFlowArray = []
     pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
-    rvm = Rvm(pFlowArray,False)
-    time = 3.0
+    rvm = Rvm(pFlowArray,0.1,True)
+    time = 3
     data,colors = rvm.run(time)
     momentArray = rvm.getVortexMoment()
     plotDrag(momentArray,time)
     ##Uncomment these to particles, It also stores a video 
-    #plotter = p.ParticlePlotter((-1.5,3.5),(-2,2))
-    #plotter.update(data,colors)
-    #filename = 'temp'
-    #plotter.run(filename,False,True,True)
+    plotter = p.ParticlePlotter((-1.5,3.5),(-2,2))
+    plotter.update(data,colors)
+    filename = 'temp'
+    plotter.run(filename,False,True,True)
 
 def testElemDivider():
     pos =  5+2j
