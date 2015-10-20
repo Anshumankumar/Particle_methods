@@ -45,6 +45,8 @@ class FlowElement:
 
     def get_color(self):
         return 'y'
+    
+    @staticmethod
     def decoVel(func):
         def vel(*arg,**kwargs):
             try:
