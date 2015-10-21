@@ -3,6 +3,7 @@
 *.png
 *.aux
 *.log
+*.pyc
 *.*.swo
 *.*.swp
 __pycache__

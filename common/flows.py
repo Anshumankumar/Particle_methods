@@ -134,6 +134,10 @@ class Vortex(FlowElement):
         else:
             return 'r'
 
+    def getMPCoef(self,n):
+        self.mpCoef = [0]*n
+        self.mpCoef[0] = self.strength
+        return self.mpCoef
 
 class VortexBlobKrasny(Vortex):
     def compute_vel(self,outputPosition):
@@ -182,10 +186,12 @@ class Uniform(FlowElement):
     def compute_vel(self,outputPosition):
          return (complex(self.strength,0))
 
-def update(test):
-    for elements in test:
-        tempVel = complex(0,0)
-        for elements2 in test:
-            if (elements != elements2):
-                tempVel = tempVel + elements2.compute_vel(elements.get_pos())
-        elements.update_flow_euler(tempVel,TIME_STEP)
+def velUpdate(particleArray):
+    velArray = []
+    for particle in particleArray:
+        tempVel = 0
+        for particle2 in particleArray:
+            tempVel = tempVel+particle2.compute_vel(particle.position)
+        velArray.append(tempVel)
+    return velArray
+
