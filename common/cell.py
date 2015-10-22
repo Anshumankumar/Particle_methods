@@ -21,6 +21,10 @@ class Cell:
     def addParticle(self,particle):
         self.particleArray.append(particle)
 
+    def addParticleArray(self,particleArray):
+        self.particleArray = particleArray
+
+
     def addChildCell(self):
         length = self.length
         n = self.maxNoOfParticle
@@ -53,13 +57,14 @@ class Cell:
             dist =  child.position -self.position
             for i in range(n):
                 for j in range(i+1):
-                    self.mpCoef[i] = self.mpCoef[i]+(tempMpCoef[j]*
-                            pow(dist,i-j)*nCr(i,j))
+                    temp =  tempMpCoef[j]* pow(dist,i-j)
+                    temp = temp*nCr(i,j)
+                    self.mpCoef[i] = self.mpCoef[i]+ temp
         return self.mpCoef
 
 
     def checkParticle(self):
-        if (len(self.particleArray) > self.maxNoOfParticle):
+        if (len(self.particleArray) > self.maxNoOfParticle and self.length >0.05):
             self.addChildCell()
             self.distributeParticle()
             for child in self.childs:
@@ -120,8 +125,7 @@ def tempTest():
 
     ctime = time.clock()
     cell = Cell(0+0j,1,5)
-    for particle in particleArray:
-        cell.addParticle(particle)
+    cell.addParticleArray(particleArray)
     cell.checkParticle()
     cell.getMPCoef(20)
     velArray = []

@@ -7,8 +7,8 @@
 \usepackage[font={small,it}]{caption}
 
 \graphicspath{ {images/} }
-\title {Particle Method Assignment 4 \\
-Flow pass a circular Cylinder} 
+\title {Particle Method Assignment 5 \\
+Flow pass a circular Cylinder with Body cell TreeCode} 
 \author {Anshuman kumar \\
 Roll no.  120010036}
 
@@ -20,8 +20,13 @@ The random vortex method is used to simulate the flow across a circular cylinder
 The simulation is done using two step. First is Advection and second is diffusion.
 The diffusion is simulated using the Random walk method. The timestep used
 for this assigment was 0.1 and maximum strength for vortex blob was also 
-0.1.The total simulation is done for three second. Being a O(n2) algorithm.
-It becomes computationally infeasible for computation beyond that. Finally drag has been calculated after that using vortex moment method.
+0.1.The total simulation is done for three second.
+
+Now I am using the Multipole method for computing the vortex vortex interation . Now the algorithm is O(nlogn). 
+But due to high constant factor and panel Vortex Interaction I could only simulate the cylinder with 150 panels. 
+
+Run the cell.py in common to see the error between normal method and multipole method. It comes to be about 10e-9 for 20 coefficient. Around 500
+particle mulipole method starts dominating over normal method
 
 \section{Results}
 See the flow\_pass\_cylinder.mp4 in the same directory to see the video.

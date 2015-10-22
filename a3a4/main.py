@@ -20,16 +20,16 @@ if __name__ == '__main__':
     pFlowArray = []
 
 
-   # pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
-    pFlowArray.append(f.Vortex(complex(-1.010,0),1,1,False))
-    pointlist = cylinder(400)
+    pFlowArray.append(f.Uniform(complex(-100,0),1,1,True))
+   # pFlowArray.append(f.Vortex(complex(-1.010,0),1,1,False))
+    pointlist = cylinder(40)
     matCr=MatCreator(pointlist,pFlowArray)
     #addTracerPoint(pFlowArray)
     length = len(pFlowArray)
     pFlowArray.extend(matCr.getMatVP())
-    sim = Simulator(timestep = 0.01)
+    sim = Simulator(timestep = 0.1)
     sim.updateElements(pFlowArray)
-    data,colors = sim.run(2,matCr.updateFlows)
+    data,colors = sim.run(0.2,matCr.updateFlows)
     plotter = p.ParticlePlotter((-2,2),(-2,2))
     plotter.update(data,colors)
     filename = "temp"

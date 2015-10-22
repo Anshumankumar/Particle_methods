@@ -33,7 +33,7 @@ class Rvm(object):
         self.counter = 0
 
     def createPoints(self):
-        pointList = cylinder()
+        pointList = cylinder(150)
         self.matCr = MatCreator(pointList,self.flows)
         self.vortexPList = self.matCr.getMatVP()
         self.vortexBlobPoints = []
@@ -45,7 +45,7 @@ class Rvm(object):
         self.currentFlowArray =[]
         self.currentFlowArray.extend(self.vortexPList)
         self.currentFlowArray.extend(self.flows)
-        self.sim.updateElements(self.currentFlowArray)
+        self.sim.updateElements([],self.currentFlowArray)
         
     def computeDrag(self,vFlows):
         moment = 0+0j
@@ -58,8 +58,8 @@ class Rvm(object):
         return self.momentArray
 
     def initializeGrid(self):
-        xx = linspace(-2,2,40)
-        yy = linspace(-2,2,40)
+        xx = linspace(0,2,20)
+        yy = linspace(0,2,20)
         self.xx,self.yy = meshgrid(xx,yy)
         self.x,self.y = self.xx.ravel(),self.yy.ravel()
         self.z = self.x+1j*self.y
@@ -76,7 +76,7 @@ class Rvm(object):
             tangent = -element.position.imag +element.position.real*1j
             tangent = tangent/abs(tangent);
             strength = component(vel*element.length,tangent)
-            vortexBlob = f.VortexBlobKrasny(pos,strength,radius = distance)
+            vortexBlob = f.Vortex(pos,strength,radius = distance)
             VortexBlobArray.append(vortexBlob)
         return VortexBlobArray
 
@@ -89,7 +89,7 @@ class Rvm(object):
             ux = t.real
             vy = t.imag
             matplotlib.pyplot.quiver(self.x,self.y,ux,vy)
-            matplotlib.pyplot.savefig(str(self.sim.counter)+"full.png")
+            matplotlib.pyplot.savefig(str(self.sim.counter)+"quiver.png")
             matplotlib.pyplot.clf()
 
     def updateFlow(self):
@@ -117,7 +117,10 @@ class Rvm(object):
         self.vortexPList = self.matCr.getMatVP()
         self.currentFlowArray[:len(self.vortexPList)] = self.vortexPList
         self.momentArray.append(self.computeDrag(self.flows[1:]))
-        self.sim.updateElements(self.currentFlowArray)
+        passiveElem = self.currentFlowArray[:(len(self.vortexPList)+1)]
+
+        activeElem = self.currentFlowArray[(len(self.vortexPList)+1):]
+        self.sim.updateElements(activeElem,passiveElem)
         for element in self.currentFlowArray:
             self.randomWalk(element,0.004,0.1)
 
@@ -200,21 +203,22 @@ if __name__ == '__main__':
     rvm = Rvm(pFlowArray,0.1,True)
     time = 3
     data,colors = rvm.run(time)
-    momentArray = rvm.getVortexMoment()
-    plotDrag(momentArray,time)
-    ##Uncomment these to particles, It also stores a video 
+     ##Uncomment these to particles, It also stores a video 
     plotter = p.ParticlePlotter((-1.5,3.5),(-2,2))
     plotter.update(data,colors)
     filename = 'temp'
     plotter.run(filename,False,True,True)
+    momentArray = rvm.getVortexMoment()
+    plotDrag(momentArray,time)
+
 
 def testElemDivider():
     pos =  5+2j
     elemList = []
     v = f.VortexBlobKrasny(pos,-2.5,radius=0.01)
-    elemList.append(f.VortexBlobKrasny(pos,-1.0,radius=0.01))
-    elemList.append(f.VortexBlobKrasny(pos,-1.0,radius=0.01))
-    elemList.append(f.VortexBlobKrasny(pos,-0.5,radius=0.01))
+    elemList.append(f.Vortex(pos,-1.0,radius=0.01))
+    elemList.append(f.Vortex(pos,-1.0,radius=0.01))
+    elemList.append(f.Vortex(pos,-0.5,radius=0.01))
     r = Rvm([])
     elemList2 = r.elemDivider(v,1.00)
     assert(elemList == elemList2)
@@ -222,7 +226,7 @@ def testElemDivider():
 
 def testRandomWalk():
     pos =  1.05*(-0.7071067811865475+0.7071067811865475j)
-    v = f.VortexBlobKrasny(pos,2.5,radius=0.01)
+    v = f.Vortex(pos,2.5,radius=0.01)
     r = Rvm([])
     r.randomWalk(v,0.002,0.1 )
     assert(abs(v.position) >= 1.00)
