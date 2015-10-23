@@ -2,6 +2,7 @@ from particle import Particle
 
 def initParticle():
     particleArray = []
+    h = 0.0625
     x = -0.625; #Creating the boundary element 
     rho = 1.0
     p = 1.0
@@ -19,6 +20,9 @@ def initParticle():
         x = x+ 0.0625
         particleArray.append(Particle(x,rho,u,p,mass))
 
+def computeNextTimeStep(particleArray):
+    for (i in range(80,480))
+        get
 if __name__ == '__main__'
     startPoint =  80
     endPoint = 480
