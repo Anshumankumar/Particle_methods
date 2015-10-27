@@ -1,0 +1,39 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[font={small,it}]{caption}
+
+\graphicspath{ {images/} }
+\title {Particle Method Assignment 8 \\
+Shock tube simulation with SPH with Bins} 
+\author {Anshuman kumar \\
+Roll no.  120010036}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+This assignment simulate the classical shock-tube problem using the
+Smoothed Particle Hydrodynamics (SPH) technique. The result have been compared
+from the analytical solution generated from matlab. The code used for analytical solution
+was taken from
+http://www.mathworks.com/matlabcentral/fileexchange/
+46311-sod-shock-tube-problem-solver.
+The 'allplot.png' show the results from SPH and analytical solution.
+
+\section{Code}
+The main.py only generate the simulations and save it to data folder.
+For plotting use plotter.py
+\section{Result}
+The time taken by python for running normal code for timestep 0.005 was 82 sec. While for the nearest neighobour it took only 13 sec for same simulation. So we got a speed up of around 5. But as there are less no of particle and the problem in one dimension the speed up is less. We can get a much more speed up if no of particles and dimension increases.
+See allplot.png in the folder for clear results.
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{allplot}
+    \caption{Plot showing all u,p,e,rho at 0.2 sec} 
+\end{figure}
+
+\end{document}
