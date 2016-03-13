@@ -111,6 +111,6 @@ class ShockTube():
 
 
 if __name__ == '__main__':
-    simulator = ShockTube(0.2,0.0001)
+    simulator = ShockTube(0.5,0.002)
     simulator.run()
     simulator.save()
